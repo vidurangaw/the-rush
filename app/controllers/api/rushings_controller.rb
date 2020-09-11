@@ -5,8 +5,8 @@ module Api
     before_action :filter_records, :sort_records
 
     def index
-      @rushings = @rushings.page(params[:page])
-      render json: { rushings: @rushings }
+      @rushings = @rushings.page(params[:page]).per(10)
+      render json: { data: @rushings.as_json(except: %i[id lng_int]) }
     end
 
     def download
@@ -17,18 +17,18 @@ module Api
     private
 
     def filter_records
-      @rushings = if params[:player].present?
-                    Rushing.where('player LIKE ?', "%#{params[:player]}%")
+      @rushings = if params[:search_term].present?
+                    Rushing.where('player ILIKE ?', "%#{params[:search_term]}%")
                   else
                     Rushing.all
                   end
     end
 
     def sort_records
-      @rushings = if params[:sort_column].present?
-                    @rushings.order(params[:sort_column] => (params[:sort_direction] || 'asc').to_sym)
+      @rushings = if params[:sort_by].present? && params[:sort_direction].present?
+                    @rushings.order(params[:sort_by] => params[:sort_direction].to_sym)
                   else
-                    @rushings.order(:player)
+                    @rushings
                   end
     end
   end

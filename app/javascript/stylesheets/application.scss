@@ -1,2 +1,34 @@
 @import "bootstrap";
+$fa-font-path: '~@fortawesome/fontawesome-free/webfonts';
 
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+h1 {
+  font-size: 2rem;
+}
+
+.navbar-brand {
+  color: #6c7ae0;
+  font-weight: bold;
+  &:hover {
+    color: #5465e4
+  }
+}
+
+.rushings {
+  &__table {
+
+
+    table-layout: fixed;
+    thead {
+      background: #6c7ae0;
+      color: #ffffff;
+      th {
+        cursor: pointer;
+      }
+      th:first-child {
+        width: 15%;
+      }
+    } 
+  }
+}
