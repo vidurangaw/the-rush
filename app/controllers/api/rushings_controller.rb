@@ -2,9 +2,10 @@
 
 module Api
   class RushingsController < ApplicationController
-    before_action :filter_records
+    before_action :filter_records, :sort_records
 
     def index
+      @rushings = @rushings.page(params[:page])
       render json: { rushings: @rushings }
     end
 
@@ -16,7 +17,19 @@ module Api
     private
 
     def filter_records
-      @rushings = Rushing.all
+      @rushings = if params[:player].present?
+                    Rushing.where('player LIKE ?', "%#{params[:player]}%")
+                  else
+                    Rushing.all
+                  end
+    end
+
+    def sort_records
+      @rushings = if params[:sort_column].present?
+                    @rushings.order(params[:sort_column] => (params[:sort_direction] || 'asc').to_sym)
+                  else
+                    @rushings.order(:player)
+                  end
     end
   end
 end
