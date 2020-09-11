@@ -60,6 +60,7 @@ class Rushings extends Component {
   };
 
   render () {
+    const csrf_token = document.querySelector('[name=csrf-token]').content
     var sortIconClass = 'fa-sort'
     if (this.state.sortDirection == 'asc'){
       sortIconClass = 'fa-sort-up'
@@ -70,15 +71,24 @@ class Rushings extends Component {
 
     return (
       <div className="rushings">
-        <form className="form-inline">
-          <div className="form-group">
-            <input type="text" 
-                   className="form-control" 
-                   placeholder="Search by player"
-                   value={this.state.searchTerm}
-                   onChange={this.handleSeachChange}/>
-          </div>
-        </form>  
+        <div className="d-flex justify-content-between">
+          <form className="form-inline">
+            <div className="form-group">
+              <input type="text" 
+                     className="form-control" 
+                     placeholder="Search by player"
+                     value={this.state.searchTerm}
+                     onChange={this.handleSeachChange}/>
+            </div>
+          </form> 
+          <form action="/api/rushings/download" method="post">
+            <input type="hidden" name="authenticity_token" value={csrf_token}/>
+            <input type="hidden" name="search_term" value={this.state.searchTerm}/>
+            <input type="hidden" name="sort_by" value={this.state.sortBy}/>
+            <input type="hidden" name="sort_direction" value={this.state.sortDirection}/>
+            <button type="submit" class="btn rushings__download">Download</button>
+          </form> 
+        </div>
         <div className="table-responsive mt-3">
           <table className="rushings__table table">
             <thead>
@@ -124,7 +134,7 @@ class Rushings extends Component {
                 <th scope="col" data-toggle="tooltip" title="Rushing Fumbles">FUM</th>
               </tr>
             </thead>
-            
+
             <tbody>
               {this.state.rushings.map((rushing, i) => (
                 <tr key={i}>

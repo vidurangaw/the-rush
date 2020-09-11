@@ -17,11 +17,9 @@ h1 {
 
 .rushings {
   &__table {
-
-
     table-layout: fixed;
     thead {
-      background: #6c7ae0;
+      background-color: #6c7ae0;
       color: #ffffff;
       th {
         cursor: pointer;
@@ -30,5 +28,13 @@ h1 {
         width: 15%;
       }
     } 
+  }
+  &__download {
+    background-color: #6c7ae0;
+    color: #ffffff;
+    &:hover {
+      background-color: #5465e4;
+      color: #ffffff;
+    }
   }
 }
