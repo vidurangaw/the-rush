@@ -16,6 +16,16 @@ h1 {
 }
 
 .rushings {
+  &__search {
+    input {
+      &:focus {
+        border-color: #6c7ae0;
+        outline: none;
+        box-shadow: none;
+      }
+    }
+  }
+
   &__table {
     table-layout: fixed;
     thead {
@@ -29,12 +39,30 @@ h1 {
       }
     } 
   }
+
   &__download {
-    background-color: #6c7ae0;
-    color: #ffffff;
-    &:hover {
-      background-color: #5465e4;
+    button {
+      background-color: #6c7ae0;
       color: #ffffff;
+      &:hover {
+        background-color: #5465e4;
+        color: #ffffff;
+      }
+    }
+  }
+
+  &__pagination {
+    .page-item.active a {
+      background-color: #6c7ae0;
+      border-color: #6c7ae0;
+    }  
+    .page-item a {
+      color: #6c7ae0;
+      outline: none;
+      &:focus {
+        outline: none;
+        box-shadow: none;
+      }
     }
   }
 }

@@ -1,7 +1,6 @@
-import React, { Component, Fragment } from "react"
+import React, { Component } from "react"
 import { Link } from "react-router-dom";
 import Rushings from "./Rushings";
-
 
 const Home = (props) => {
   return (

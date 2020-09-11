@@ -6,7 +6,7 @@ module Api
 
     def index
       @rushings = @rushings.page(params[:page]).per(10)
-      render json: { data: @rushings.as_json(except: %i[id lng_int]) }
+      render json: { data: @rushings.as_json(except: %i[id lng_int]), total_pages: @rushings.total_pages }
     end
 
     def download

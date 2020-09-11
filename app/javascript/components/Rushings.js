@@ -1,6 +1,8 @@
 import React, { Component } from "react"
 import axios from 'axios';
 import queryString from 'query-string';
+import ReactPaginate from 'react-paginate';
+
 
 class Rushings extends Component {
 
@@ -12,6 +14,8 @@ class Rushings extends Component {
     this.state = {
       loading: true,
       rushings: [],
+      page: params.page,
+      totalPages: null,
       searchTerm: params.search_term || '',
       sortBy: params.sort_by || '',
       sortDirection: params.sort_direction || '',
@@ -24,6 +28,7 @@ class Rushings extends Component {
     if (this.state.loading == true){
       axios.get('/api/rushings', {
         params: {
+          page: this.state.page,
           search_term: this.state.searchTerm,
           sort_by: this.state.sortBy,
           sort_direction: this.state.sortDirection
@@ -34,7 +39,7 @@ class Rushings extends Component {
           const url = res.request.responseURL.replace(/^.*\/\/[^\/]+\/api\/rushings/, '')
           this.props.history.push(url);
         }
-        this.setState({ rushings: res.data.data, loading: false });
+        this.setState({ rushings: res.data.data, totalPages: res.data.total_pages, loading: false });
       })
       .catch(err => {
         this.setState({ loading: false });
@@ -47,7 +52,7 @@ class Rushings extends Component {
   };
 
   handleSeachChange = (value) => {
-    this.setState({ searchTerm: value });
+    this.setState({ searchTerm: value, page: null });
 
     if (this.typingTimeout) clearTimeout(this.typingTimeout);
     this.typingTimeout = setTimeout(() => {
@@ -66,6 +71,11 @@ class Rushings extends Component {
     this.setState({ sortBy: sortBy, sortDirection: direction, loading: true}, () => this.loadData());  
   };
 
+  handlePageClick = (data) => {
+    const page = data.selected + 1;
+    this.setState({page: page, loading: true}, () => this.loadData());
+  };
+
   render () {
     const csrf_token = document.querySelector('[name=csrf-token]').content
     var sortIconClass = 'fa-sort'
@@ -79,25 +89,29 @@ class Rushings extends Component {
     return (
       <div className="rushings">
         <div className="d-flex justify-content-between">
-          <form className="form-inline" onSubmit={(e) => this.handleSeachChange(event.target.search_term.value)}>
-            <div className="form-group">
-              <input type="text" 
-                     className="form-control" 
-                     placeholder="Search by player"
-                     name="search_term"
-                     value={this.state.searchTerm}
-                     onChange={(e) => this.handleSeachChange(e.target.value)}/>
-            </div>
-          </form> 
-          <form action="/api/rushings/download" method="post">
-            <input type="hidden" name="authenticity_token" value={csrf_token}/>
-            <input type="hidden" name="search_term" value={this.state.searchTerm}/>
-            <input type="hidden" name="sort_by" value={this.state.sortBy}/>
+          <div className="rushings__search">
+            <form className="form-inline" onSubmit={(e) => this.handleSeachChange(event.target.search_term.value)}>
+              <div className="form-group">
+                <input type="text" 
+                       className="form-control" 
+                       placeholder="Search by player"
+                       name="search_term"
+                       value={this.state.searchTerm}
+                       onChange={(e) => this.handleSeachChange(e.target.value)}/>
+              </div>
+            </form> 
+          </div>
+          <div className="rushings__download">
+            <form action="/api/rushings/download" method="post">
+              <input type="hidden" name="authenticity_token" value={csrf_token}/>
+              <input type="hidden" name="search_term" value={this.state.searchTerm}/>
+              <input type="hidden" name="sort_by" value={this.state.sortBy}/>
 
-            <input type="hidden" name="sort_direction" value={this.state.sortDirection}/>
+              <input type="hidden" name="sort_direction" value={this.state.sortDirection}/>
 
-            <button type="submit" className="btn rushings__download">Download</button>
-          </form> 
+              <button type="submit" className="btn rushings__download">Download</button>
+            </form> 
+          </div>
         </div>
         <div className="table-responsive mt-3">
           <table className="rushings__table table">
@@ -155,6 +169,28 @@ class Rushings extends Component {
               ))}
             </tbody>
           </table>
+          <div className="rushings__pagination d-flex justify-content-center">
+            <ReactPaginate
+              previousLabel={'<'}
+              nextLabel={'>'}
+              breakLabel={'...'}
+              breakClassName={'break-me'}
+              pageCount={this.state.totalPages}
+              marginPagesDisplayed={5}
+              pageRangeDisplayed={5}
+              onPageChange={this.handlePageClick}
+              containerClassName={'pagination'}
+              activeClassName={'active'}
+              pageClassName='page-item'
+              pageLinkClassName='page-link'
+              previousClassName='page-item'
+              previousLinkClassName='page-link'
+              nextClassName='page-item'
+              nextLinkClassName='page-link'
+              breakClassName='page-item'
+              breakLinkClassName='page-link'
+            />
+          </div>
         </div>
       </div>  
     );
