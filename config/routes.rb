@@ -1,3 +1,10 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+
+  namespace :api do
+    get 'rushings', to: 'rushings#index'
+    get 'rushings/download', to: 'rushings#download'
+  end
+
+  root 'pages#home'
+  get '/*path' => 'pages#home'
 end
