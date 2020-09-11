@@ -5,13 +5,17 @@ module Api
     before_action :filter_records, :sort_records
 
     def index
-      @rushings = @rushings.page(params[:page]).per(10)
+      @rushings = @rushings.page(params[:page]).per(20)
       render json: { data: @rushings.as_json(except: %i[id lng_int]), total_pages: @rushings.total_pages }
     end
 
     def download
-      csv_data = DownloadService.generate_csv(@rushings)
-      send_data csv_data, filename: "rushings-#{Time.current.to_i}.csv"
+      headers.delete('Content-Length')
+      response.headers['X-Accel-Buffering'] = 'no'
+      response.headers['Content-Type'] = 'text/cs'
+      response.headers['Content-disposition'] = "attachment; filename=rushings-#{Time.current.to_i}.csv"
+      response.status = 200
+      self.response_body = DownloadService.generate_csv(@rushings)
     end
 
     private

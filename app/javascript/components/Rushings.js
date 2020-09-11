@@ -169,28 +169,33 @@ class Rushings extends Component {
               ))}
             </tbody>
           </table>
-          <div className="rushings__pagination d-flex justify-content-center">
-            <ReactPaginate
-              previousLabel={'<'}
-              nextLabel={'>'}
-              breakLabel={'...'}
-              breakClassName={'break-me'}
-              pageCount={this.state.totalPages}
-              marginPagesDisplayed={5}
-              pageRangeDisplayed={5}
-              onPageChange={this.handlePageClick}
-              containerClassName={'pagination'}
-              activeClassName={'active'}
-              pageClassName='page-item'
-              pageLinkClassName='page-link'
-              previousClassName='page-item'
-              previousLinkClassName='page-link'
-              nextClassName='page-item'
-              nextLinkClassName='page-link'
-              breakClassName='page-item'
-              breakLinkClassName='page-link'
-            />
-          </div>
+          {this.state.rushings.length > 0
+            ? <div className="rushings__pagination d-flex justify-content-center">
+                <ReactPaginate
+                  previousLabel={'<'}
+                  nextLabel={'>'}
+                  breakLabel={'...'}
+                  breakClassName={'break-me'}
+                  pageCount={this.state.totalPages}
+                  marginPagesDisplayed={5}
+                  pageRangeDisplayed={5}
+                  onPageChange={this.handlePageClick}
+                  containerClassName={'pagination'}
+                  activeClassName={'active'}
+                  pageClassName='page-item'
+                  pageLinkClassName='page-link'
+                  previousClassName='page-item'
+                  previousLinkClassName='page-link'
+                  nextClassName='page-item'
+                  nextLinkClassName='page-link'
+                  breakClassName='page-item'
+                  breakLinkClassName='page-link'
+                />
+              </div>
+            : <p className="text-center">No matching records were found.</p>
+          }
+
+          
         </div>
       </div>  
     );
