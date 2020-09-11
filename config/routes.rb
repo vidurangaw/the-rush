@@ -1,5 +1,6 @@
-Rails.application.routes.draw do
+# frozen_string_literal: true
 
+Rails.application.routes.draw do
   namespace :api do
     get 'rushings', to: 'rushings#index'
     get 'rushings/download', to: 'rushings#download'

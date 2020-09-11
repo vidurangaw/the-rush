@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'csv'
 
 class DownloadService
@@ -8,7 +10,7 @@ class DownloadService
         csv << mappings.values
 
         records.each do |record|
-          csv << mappings.keys.map{ |attr| record.send(attr) }
+          csv << mappings.keys.map { |attr| record.send(attr) }
         end
       end
     end

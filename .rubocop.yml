@@ -1,0 +1,9 @@
+AllCops:
+  TargetRubyVersion: 2.7
+  Exclude:
+    - 'db/**/*'
+    - 'bin/**/*'
+    - 'node_modules/**/*'
+
+Style/Documentation:
+  Enabled: false

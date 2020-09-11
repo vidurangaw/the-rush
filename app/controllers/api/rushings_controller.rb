@@ -1,18 +1,22 @@
-class Api::RushingsController < ApplicationController
-  before_action :filter_records
+# frozen_string_literal: true
 
-  def index
-    render json: { rushings: @rushings }
-  end
+module Api
+  class RushingsController < ApplicationController
+    before_action :filter_records
 
-  def download
-    csv_data = DownloadService.generate_csv(@rushings)
-    send_data csv_data, filename: "rushings-#{Time.current.to_i}.csv"
-  end
+    def index
+      render json: { rushings: @rushings }
+    end
 
-  private 
+    def download
+      csv_data = DownloadService.generate_csv(@rushings)
+      send_data csv_data, filename: "rushings-#{Time.current.to_i}.csv"
+    end
 
-  def filter_records
-    @rushings = Rushing.all 
+    private
+
+    def filter_records
+      @rushings = Rushing.all
+    end
   end
 end
