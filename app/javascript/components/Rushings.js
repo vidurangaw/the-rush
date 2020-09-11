@@ -1,17 +1,26 @@
 import React, { Component } from "react"
 import axios from 'axios';
+import queryString from 'query-string';
 
 class Rushings extends Component {
-  state = {
-    loading: true,
-    rushings: [],
-    searchTerm: '',
-    sortBy: '',
-    sortDirection: '',
-    typingTimeout: 0
+
+  constructor(props) {
+    super(props);
+
+    let params = queryString.parse(this.props.location.search)
+
+    this.state = {
+      loading: true,
+      rushings: [],
+      searchTerm: params.search_term || '',
+      sortBy: params.sort_by || '',
+      sortDirection: params.sort_direction || '',
+      typingTimeout: 0
+    }
   }
 
-  loadData = () => {
+  loadData = (intialLoad) => {
+    var params = {}         
     if (this.state.loading == true){
       axios.get('/api/rushings', {
         params: {
@@ -21,6 +30,10 @@ class Rushings extends Component {
         }
       })
       .then(res => {
+        if (!intialLoad) {
+          const url = res.request.responseURL.replace(/^.*\/\/[^\/]+\/api\/rushings/, '')
+          this.props.history.push(url);
+        }
         this.setState({ rushings: res.data.data, loading: false });
       })
       .catch(err => {
@@ -30,25 +43,19 @@ class Rushings extends Component {
   };
 
   componentDidMount() {
-    this.loadData();
+    this.loadData(true);
   };
 
-  componentDidUpdate() {
-    this.loadData();
-  };
-
-  handleSeachChange = (event) => {
-    const value = event.target.value;
-    this.setState({ searchTerm: value});
+  handleSeachChange = (value) => {
+    this.setState({ searchTerm: value });
 
     if (this.typingTimeout) clearTimeout(this.typingTimeout);
     this.typingTimeout = setTimeout(() => {
-      this.setState({loading: true});
+      this.setState({loading: true}, () => this.loadData());
     }, 500);
   };
 
   handleSortChange = (sortBy) => {
-    console.log(sortBy)
     var direction = '';
     if (this.state.sortDirection == '' || this.state.sortBy != sortBy){
       direction = 'desc'
@@ -56,7 +63,7 @@ class Rushings extends Component {
     else {
       direction = this.state.sortDirection == 'desc' ? 'asc' : ''
     }
-    this.setState({ sortBy: sortBy, sortDirection: direction, loading: true});  
+    this.setState({ sortBy: sortBy, sortDirection: direction, loading: true}, () => this.loadData());  
   };
 
   render () {
@@ -72,21 +79,24 @@ class Rushings extends Component {
     return (
       <div className="rushings">
         <div className="d-flex justify-content-between">
-          <form className="form-inline">
+          <form className="form-inline" onSubmit={(e) => this.handleSeachChange(event.target.search_term.value)}>
             <div className="form-group">
               <input type="text" 
                      className="form-control" 
                      placeholder="Search by player"
+                     name="search_term"
                      value={this.state.searchTerm}
-                     onChange={this.handleSeachChange}/>
+                     onChange={(e) => this.handleSeachChange(e.target.value)}/>
             </div>
           </form> 
           <form action="/api/rushings/download" method="post">
             <input type="hidden" name="authenticity_token" value={csrf_token}/>
             <input type="hidden" name="search_term" value={this.state.searchTerm}/>
             <input type="hidden" name="sort_by" value={this.state.sortBy}/>
+
             <input type="hidden" name="sort_direction" value={this.state.sortDirection}/>
-            <button type="submit" class="btn rushings__download">Download</button>
+
+            <button type="submit" className="btn rushings__download">Download</button>
           </form> 
         </div>
         <div className="table-responsive mt-3">
