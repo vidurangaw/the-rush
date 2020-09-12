@@ -88,5 +88,4 @@ test:
 production:
   <<: *default
   database: the_rush_production
-  username: postgres
-  password: <%= ENV['THE_RUSH_DATABASE_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
