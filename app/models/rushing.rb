@@ -12,10 +12,10 @@ class Rushing < ApplicationRecord
     "yds_g": 'Yds/G',
     "td": 'TD',
     "lng": 'Lng',
-    "1st": '1st',
-    "1st_pct": '1st%',
-    "20_plus": '20+',
-    "40_plus": '40+',
+    "first": '1st',
+    "first_pct": '1st%',
+    "twenty_plus": '20+',
+    "forty_plus": '40+',
     "fum": 'FUM'
   }.freeze
 

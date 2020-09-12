@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_10_233020) do
+ActiveRecord::Schema.define(version: 2020_09_12_004321) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,10 +27,10 @@ ActiveRecord::Schema.define(version: 2020_09_10_233020) do
     t.integer "td"
     t.string "lng"
     t.integer "lng_int"
-    t.integer "1st"
-    t.float "1st_pct"
-    t.integer "20_plus"
-    t.integer "40_plus"
+    t.integer "first"
+    t.float "first_pct"
+    t.integer "twenty_plus"
+    t.integer "forty_plus"
     t.integer "fum"
     t.index ["lng_int"], name: "index_rushings_on_lng_int"
     t.index ["player"], name: "index_rushings_on_player"
