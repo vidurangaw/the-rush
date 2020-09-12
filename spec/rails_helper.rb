@@ -36,7 +36,29 @@ rescue ActiveRecord::PendingMigrationError => e
   exit 1
 end
 
-Capybara.javascript_driver = :selenium_headless
+Capybara.register_driver :selenium_chrome_headless do |app|
+  if ENV['DOCKER']
+    Capybara::Selenium::Driver.new(app,
+                                   browser: :remote,
+                                   url: "http://selenium:4444/wd/hub",
+                                   desired_capabilities: :chrome)
+  else
+    options = Selenium::WebDriver::Chrome::Options.new
+    options.headless!
+    Capybara::Selenium::Driver.new(app,
+                                   browser: :chrome,
+                                   options: options)
+  end
+end
+
+Capybara.javascript_driver = :selenium_chrome_headless
+
+if ENV['DOCKER']
+  ip = `/sbin/ip route|awk '/scope/ { print $9 }'`.strip
+  Capybara.server_host = ip
+  Capybara.server_port = 3001
+end
+
 
 RSpec.configure do |config|
   config.include ApiHelpers, type: :request

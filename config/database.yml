@@ -24,6 +24,10 @@ default: &default
 development:
   <<: *default
   database: the_rush_development
+  <% if ENV['DOCKER'] %>
+  username: postgres
+  host: db 
+  <% end %>
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -58,7 +62,10 @@ development:
 test:
   <<: *default
   database: the_rush_test
-
+  <% if ENV['DOCKER'] %>
+  username: postgres
+  host: db 
+  <% end %>
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
 # ever seen by anyone, they now have access to your database.
@@ -81,5 +88,5 @@ test:
 production:
   <<: *default
   database: the_rush_production
-  username: the_rush
+  username: postgres
   password: <%= ENV['THE_RUSH_DATABASE_PASSWORD'] %>
