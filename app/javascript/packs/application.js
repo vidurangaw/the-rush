@@ -18,6 +18,13 @@ import React from "react";
 import { render } from "react-dom";
 import App from "../App";
 
+// React
+import axios from 'axios'
+if (document.getElementsByName('csrf-token').length > 0){
+  axios.defaults.headers.common['X-CSRF-Token'] = document.getElementsByName('csrf-token')[0].content;
+  axios.defaults.headers.common['Accept'] = 'application/json';
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   render(
     <App />,

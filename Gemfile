@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.7.1'
+ruby '2.6.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.3', '>= 6.0.3.2'
@@ -31,7 +31,13 @@ gem 'kaminari', '~> 1.2'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'capybara', '~> 3.33'
+  gem 'database_cleaner-active_record', '~> 1.8'
+  gem 'factory_bot_rails', '~> 6.1'
+  gem 'faker', '~> 2.13'
+  gem 'rspec-rails', '~> 4.0.1'
   gem 'rubocop', '~> 0.90.0', require: false
+  gem 'webdrivers', '~> 4.0'
 end
 
 group :development do

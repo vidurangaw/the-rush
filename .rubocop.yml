@@ -4,6 +4,7 @@ AllCops:
     - 'db/**/*'
     - 'bin/**/*'
     - 'node_modules/**/*'
+    - 'spec/**/*'
 
 Style/Documentation:
   Enabled: false
