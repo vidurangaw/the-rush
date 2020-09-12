@@ -42,6 +42,7 @@ class Rushings extends Component {
         this.setState({ rushings: res.data.data, totalPages: res.data.total_pages, loading: false });
       })
       .catch(err => {
+        alert(err.response.data.message)
         this.setState({ loading: false });
       });
     }
@@ -77,7 +78,6 @@ class Rushings extends Component {
   };
 
   render () {
-    const csrf_token = document.querySelector('[name=csrf-token]').content
     var sortIconClass = 'fa-sort'
     if (this.state.sortDirection == 'asc'){
       sortIconClass = 'fa-sort-up'
@@ -103,7 +103,6 @@ class Rushings extends Component {
           </div>
           <div className="rushings__download">
             <form action="/api/rushings/download" method="post">
-              <input type="hidden" name="authenticity_token" value={csrf_token}/>
               <input type="hidden" name="search_term" value={this.state.searchTerm}/>
               <input type="hidden" name="sort_by" value={this.state.sortBy}/>
 

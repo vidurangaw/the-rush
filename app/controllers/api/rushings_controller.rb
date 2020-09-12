@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 module Api
-  class RushingsController < ApplicationController
+  class RushingsController < ActionController::API
+    rescue_from StandardError, with: :render_error
     before_action :filter_records, :sort_records
 
     def index
-      @rushings = @rushings.page(params[:page]).per(20)
+      @rushings = @rushings.page(params[:page]).per(10)
       render json: { data: @rushings.as_json(except: %i[id lng_int]), total_pages: @rushings.total_pages }
     end
 
@@ -34,6 +35,10 @@ module Api
                   else
                     @rushings
                   end
+    end
+
+    def render_error
+      render json: { message: 'There was an error processing your request.' }, status: :unprocessable_entity
     end
   end
 end
